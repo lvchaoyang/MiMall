@@ -8,7 +8,7 @@ import axios from 'axios'
 // import env from './api.reqest'
 // const baseUrl  = env.baseUrl;
 
-// 前端代理解决跨域
+// 前端proxy代理解决跨域
 const baseUrl = '/api';
 
 const service = axios.create({
