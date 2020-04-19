@@ -12,7 +12,7 @@ import axios from 'axios'
 const baseUrl = '/api';
 
 const service = axios.create({
-  baseUrl: baseUrl,
+  baseURL: baseUrl,
   timeout: 8000 // 超时
 });
 /**
@@ -38,8 +38,8 @@ service.interceptors.response.use(response => {
     alert(res.msg)
   }
 },(error)=>{
-  let res = error.response;
-  Message.error(res.data.message);
+  // let res = error.response;
+  // Message.error(res.data.message);
   return Promise.reject(error);
 });
 export default service

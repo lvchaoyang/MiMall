@@ -1,19 +1,19 @@
 .modal{
-  @include position(fixed);
+  @include position(fixed); // 进来以后 top: 0
   z-index: 10;
-  transition: all .5s;
   .mask{
     @include position(fixed);
     background-color: $colorI;
     opacity: 0.5;
   }
-  &.slide-enter-active{
-    top:0;
+  // 进来的过程和离开的过程
+  &.slide-enter-active,
+  &.slide-leave-active {
+    transition: all .5s;
   }
-  &.slide-leave-active{
-    top:-100%;
-  }
-  &.slide-enter{
+  // 进来之前，离开之后
+  &.slide-enter,
+  &.slide-leave-to {
     top:-100%;
   }
   .modal-dialog{
@@ -27,7 +27,7 @@
       line-height: 60px;
       font-size:$fontI;
       .icon-close{
-        @include positionImg(absolute,23px,25px,14px,14px,'/imgs/icon-close.png');
+        @include positionImg(absolute,23px,25px,14px,14px,'../assets/images/icon-close.png');
         transition: transform .3s;
         &:hover{
           transform: scale(1.5);
