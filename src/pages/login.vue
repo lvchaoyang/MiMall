@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import loginService from '../service/login.service'
 export default {
   name: "login",
   data() {
@@ -47,12 +48,33 @@ export default {
       userId:''
     }
   },
-  methods: {
-    login () {
-
+  methods: {  
+    /**
+     * 登录
+     */
+    async login () {
+      let json = {
+        username: this.username,
+        password: this.password
+      }
+      let data = await loginService.login(json);
+      console.log(data);
+      this.$cookie.set('userId', data.id, {expires: '1M'});
+      // todo 保存用户名
+      this.$router.push('/index');
     },
-    register () {
-
+    /**
+     * 注册s's
+     */
+    async register () {
+      let json = {
+        username: '',
+        password: '',
+        email: ''
+      }
+      let data = await loginService.reqister(json);
+      console.log(data);
+      alert('注册成功')
     }
   }
 }

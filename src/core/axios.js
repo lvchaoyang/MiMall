@@ -35,7 +35,7 @@ service.interceptors.response.use(response => {
   } else if (res.status === 10) {
     window.location.href = '/login';
   } else {
-    alert(res.msg)
+    return Promise.reject(res)
   }
 },(error)=>{
   // let res = error.response;

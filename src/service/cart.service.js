@@ -1,6 +1,10 @@
 import axios from '../core/axios';
 
 const cartService = {
+  /**
+   * 加入购物车
+   * @param {*} json 
+   */
   async addCart (json) {
     let res = await axios({
       method: 'post',
@@ -8,6 +12,13 @@ const cartService = {
       data: json
     })
     return res;
+  },
+  async getCartCount () {
+    let data = await axios({
+      url: '/carts/products/sum',
+      method: 'get'
+    })
+    return data;
   }
 }
 
