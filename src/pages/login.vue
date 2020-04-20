@@ -61,6 +61,7 @@ export default {
       console.log(data);
       this.$cookie.set('userId', data.id, {expires: '1M'});
       // todo 保存用户名
+      this.$store.dispatch('saveUserName', data.username);
       this.$router.push('/index');
     },
     /**

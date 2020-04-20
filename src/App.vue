@@ -7,6 +7,7 @@
 <script>
 import loginService from './service/login.service'
 import cartService from './service/cart.service'
+import { mapActions } from 'vuex'
 export default {
   name: 'app',
   data () {
@@ -19,15 +20,16 @@ export default {
     this.getCartCount();
   },
   methods: {
+    ...mapActions(['saveUserName', 'saveCartCount']),
     async getUser () {
       let data = await loginService.getUserInfo();
-      console.log(data)
-      // to-do 将用户信息保存到vuex中
+      this.saveUserName(data.username);
+      // this.$store.dispatch('saveUserName', data.username);
     },
     async getCartCount () {
       let data = await cartService.getCartCount();
-      console.log(data)
-      // to-do 将购物车商品数量保存到vuex中
+      this.saveCartCount(data);
+      // this.$store.dispatch('saveCartCount', data);
     }
   }
 }
