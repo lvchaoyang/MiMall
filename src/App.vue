@@ -15,20 +15,27 @@ export default {
 
     }
   },
-  mounted () {
-    this.getUser();
-    this.getCartCount();
+  async mounted () {
+    if(this.$cookie.get('userId')){
+      this.getUser();
+      this.getCartCount();
+    }
   },
   methods: {
     ...mapActions(['saveUserName', 'saveCartCount']),
     async getUser () {
       let data = await loginService.getUserInfo();
-      this.saveUserName(data.username);
+      if (data) {
+        this.saveUserName(data.username);
+      }
       // this.$store.dispatch('saveUserName', data.username);
     },
     async getCartCount () {
       let data = await cartService.getCartCount();
-      this.saveCartCount(data);
+      if (data) {
+        this.saveCartCount(data);
+      }
+      
       // this.$store.dispatch('saveCartCount', data);
     }
   }
