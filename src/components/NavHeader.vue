@@ -154,13 +154,13 @@ export default {
       this.phoneList = data.list;
     },
     login () {
-      this.$router.puth('/login')
+      this.$router.push('/login')
     },
     logout () {
-      this.$router.puth('/login')
+      this.$router.push('/login')
     },
     goToCart () {
-      this.$router.puth('/cart')
+      this.$router.push('/cart')
     }
   }
 }
@@ -201,38 +201,6 @@ export default {
         position:relative;
         height:112px;
         @include flex();
-        .header-logo {
-          display: inline-block;
-          width: 55px;
-          height: 55px;
-          background-color: $colorA;
-          a {
-            display: inline-block;
-            width: 110px;
-            height: 55px;
-            &:before {
-              content: '';
-              display: inline-block;
-              width: 55px;
-              height: 55px;
-              background: url('../assets/images/mi-logo.png') no-repeat;
-              background-size: 55px;
-              transition: margin .2s;
-            }
-            &:after {
-              content: '';
-              display: inline-block;
-              width: 55px;
-              height: 55px;
-              background: url('../assets/images/mi-home.png') no-repeat;
-              background-size: 55px;
-            }
-            &:hover:before {
-              margin-left: -55px;
-              transition: margin .2s;
-            }
-          }
-        }
         .header-menu{
           display:inline-block;
           width:643px;

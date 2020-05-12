@@ -15,12 +15,12 @@ switch (process.env.NODE_ENV) {
   case 'test':
     baseUrl = 'http://test-mall-pre.sprintboot.cn/api';
     break;
-    case 'product':
-      baseUrl = 'http://mall-pre.sprintboot.cn/api';
-      break;
-    default:
-      baseUrl = 'http://mall-pre.sprintboot.cn/api';
-      break;
+  case 'product':
+    baseUrl = 'http://mall-pre.sprintboot.cn/api';
+    break;
+  default:
+    baseUrl = 'http://mall-pre.sprintboot.cn/api';
+    break;
 }
 
 export default {

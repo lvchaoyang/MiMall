@@ -110,7 +110,7 @@ import Modal from '../components/Modal'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 import 'swiper/css/swiper.css';
 import homeService from '../service/home.service';
-// import cartService from '../service/cart.service';
+import cartService from '../service/cart.service';
 export default {
   name: "index",
   components: {
@@ -213,11 +213,12 @@ export default {
       this.phoneList = [data.list.slice(0,4), data.list.slice(4,8)];
     },
     async addCart (id) {
-      console.log(id)
-      // let params = {productId: id, select: true};
-      // let data = await cartService.addCart(params)
-      // console.log(data);
-      this.showModal = true;
+      let params = {productId: id, select: true};
+      let data = await cartService.addCart(params);
+      if (data && data.cartProductVoList) {
+        this.$store.dispatch('saveCartCount', data.cartTotalQuantity); // 更新购物车数量
+        this.showModal = true;
+      }
     },
     goToCart(){
       this.$router.push('/cart');

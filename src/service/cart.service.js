@@ -19,6 +19,13 @@ const cartService = {
       method: 'get'
     })
     return data;
+  },
+  async getCartList () {
+    let data = await axios({
+      url: '/carts',
+      method: 'get'
+    })
+    return data;
   }
 }
 

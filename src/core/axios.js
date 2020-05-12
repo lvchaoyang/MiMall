@@ -30,10 +30,13 @@ service.interceptors.request.use(config => {
 // 接口错误拦截
 service.interceptors.response.use(response => {
   let res = response.data;
+  let path = location.pathname;
   if (res.status === 0) {
     return res.data;
   } else if (res.status === 10) {
+    if (path !== '/index' && path !== '/login')
     window.location.href = '/login';
+    return Promise.reject(res);
   } else {
     return Promise.reject(res)
   }

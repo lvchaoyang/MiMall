@@ -65,7 +65,7 @@ export default {
       this.$router.push('/index');
     },
     /**
-     * 注册s's
+     * 注册
      */
     async register () {
       let json = {
