@@ -120,7 +120,10 @@
 
 <script>
 import homeService from '../service/home.service';
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import loginService from '../service/login.service';
+import cartService from '../service/cart.service';
+import { Message } from 'element-ui'
 export default {
   name: "nav-header",
   data() {
@@ -144,7 +147,11 @@ export default {
     }
   },
   mounted () {
-    this.getProductList()
+    this.getProductList();
+    let params = this.$route.params;
+    if (params && params.from === 'login') {
+      this.getCartCount();
+    }
   },
   methods: {
     async getProductList () {
@@ -156,8 +163,21 @@ export default {
     login () {
       this.$router.push('/login')
     },
+    async getCartCount () {
+      let data = await cartService.getCartCount();
+      if (data) {
+        this.$store.dispatch('saveCartCount', data);
+      }
+    },
     logout () {
-      this.$router.push('/login')
+      loginService.logout().then((res) => {
+        console.log(res)
+        Message.success('退出成功');
+        this.$cookie.set('userId', '', {expires: '-1'});
+        this.$store.dispatch('saveUserName', '');
+        this.$store.dispatch('saveCartCount', 0);
+      })
+      
     },
     goToCart () {
       this.$router.push('/cart')

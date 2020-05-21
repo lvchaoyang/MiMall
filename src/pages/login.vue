@@ -39,6 +39,7 @@
 
 <script>
 import loginService from '../service/login.service'
+import { Message } from 'element-ui'
 export default {
   name: "login",
   data() {
@@ -59,10 +60,15 @@ export default {
       }
       let data = await loginService.login(json);
       console.log(data);
-      this.$cookie.set('userId', data.id, {expires: '1M'});
+      this.$cookie.set('userId', data.id, {expires: 'Session'});
       // todo 保存用户名
       this.$store.dispatch('saveUserName', data.username);
-      this.$router.push('/index');
+      this.$router.push({
+        name: 'index',
+        params: {
+          from: 'login'
+        }
+      });
     },
     /**
      * 注册
@@ -75,7 +81,7 @@ export default {
       }
       let data = await loginService.reqister(json);
       console.log(data);
-      alert('注册成功')
+      Message.success('注册成功')
     }
   }
 }

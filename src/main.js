@@ -3,6 +3,7 @@ import router from './router'
 import store from './store'
 import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
+import 'element-ui/lib/theme-chalk/index.css'
 import App from './App.vue'
 
 const mock = false;

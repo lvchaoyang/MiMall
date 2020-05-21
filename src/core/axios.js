@@ -4,6 +4,7 @@
  * @Description:
  */
 import axios from 'axios'
+import { Message } from 'element-ui'
 // CORS解决跨域
 // import env from './api.reqest'
 // const baseUrl  = env.baseUrl;
@@ -38,6 +39,7 @@ service.interceptors.response.use(response => {
     window.location.href = '/login';
     return Promise.reject(res);
   } else {
+    Message.warning(res.msg);
     return Promise.reject(res)
   }
 },(error)=>{

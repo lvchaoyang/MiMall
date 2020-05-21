@@ -213,7 +213,7 @@ export default {
       this.phoneList = [data.list.slice(0,4), data.list.slice(4,8)];
     },
     async addCart (id) {
-      let params = {productId: id, select: true};
+      let params = {productId: id, selected: true};
       let data = await cartService.addCart(params);
       if (data && data.cartProductVoList) {
         this.$store.dispatch('saveCartCount', data.cartTotalQuantity); // 更新购物车数量

@@ -34,6 +34,16 @@ const loginService = {
       method: 'get'
     })
     return data;
+  },
+  /**
+   * 退出登录
+   */
+  async logout () {
+    let data = await axios({
+      url: '/user/logout',
+      method: 'post'
+    })
+    return data;
   }
 }
 export default loginService;

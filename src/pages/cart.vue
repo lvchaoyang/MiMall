@@ -19,7 +19,7 @@
           <ul class="cart-item-list">
             <li class="cart-item" v-for="item in list" :key='item.productId'>
               <div class="item-check">
-                <span :class="{'checkbox': true, 'checked': item.productSelected}"></span>
+                <span :class="{'checkbox': true, 'checked': item.productSelected}" @click="updateCart(item)"></span>
               </div>
               <div class="item-name">
                 <img v-lazy="item.productMainImage" alt="">
@@ -28,13 +28,13 @@
               <div class="item-price">{{item.productPrice}}元</div>
               <div class="item-num">
                 <div class="num-box">
-                  <a href="javascript:;">-</a>
+                  <a href="javascript:;" @click="updateCart(item, '-')">-</a>
                   <span>{{item.quantity}}</span>
-                  <a href="javascript:;">+</a>
+                  <a href="javascript:;" @click="updateCart(item, '+')">+</a>
                 </div>
               </div>
               <div class="item-total">{{item.productTotalPrice}}元</div>
-              <div class="item-del"></div>
+              <div class="item-del" @click="delProduct(item)"></div>
             </li>
           </ul>
         </div>
@@ -60,6 +60,7 @@ import OrderHeader from '../components/OrderHeader';
 import ServiceBar from './../components/ServiceBar'
 import NavFooter from '../components/NavFooter';
 import cartService from '../service/cart.service';
+import { Message } from 'element-ui' 
 export default {
   name: "cart",
   components: {
@@ -79,21 +80,71 @@ export default {
     this.getCartList()
   },
   methods:{
+    /**
+     * 获取购物车列表
+     */
     async getCartList () {
       let data = await cartService.getCartList()
+      this.renderData(data);
+      console.log(data)
+    },
+    /**
+     * 更新购物车数量
+     */
+    async updateCart (item, type) {
+      let quantity = item.quantity,
+          selected = item.selected;
+      if (type === '-') {
+        if (quantity === 1) {
+          Message.warning('商品至少保留一件')
+          return;
+        }
+        --quantity
+      } else if (type === '+') {
+        if (quantity > item.productStock) {
+          Message.warning('购买数量不能超过库存数量')
+          return;
+        }
+        ++quantity
+      } else {
+        selected = !item.productSelected;
+      }
+      let data = await cartService.updateCart(item.productId, {quantity, selected})
+      this.renderData(data);
+    },
+    /**
+     * 全选切换
+     */
+    async toggleAll () {
+      let url = this.allChecked ? '/carts/unSelectAll' : '/carts/selectAll';
+      let data = await cartService.selectToggle(url);
+      this.renderData(data);
+    },
+    async delProduct (item) {
+      let data = await cartService.delProduct(item.productId);
+      Message.success('删除成功');
+      this.renderData(data);
+    },
+    /**
+     * 处理数据
+     */
+    renderData (data) {
       this.list = data.cartProductVoList || [];
       this.allChecked = data.selectedAll;
       this.cartTotalPrice = data.cartTotalPrice;
       this.checkNum = this.list.filter(item => item.productSelected).length
-      console.log(data)
     },
-    // 购物车下单
+    /**
+     * 购物车下单 
+     */ 
     order(){
-      this.$router.push('/order/confirm');
+      let isCheck = this.list.every((item) => !item.productSelected);
+      if (isCheck) {
+        Message.warning('请选择一件商品')
+      } else{
+        this.$router.push('/order/confirm');
+      }
     },
-    toggleAll () {
-
-    }
   }
 }
 </script>

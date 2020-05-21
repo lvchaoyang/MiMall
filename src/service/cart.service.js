@@ -26,6 +26,28 @@ const cartService = {
       method: 'get'
     })
     return data;
+  },
+  async selectToggle (url) {
+    let data = await axios({
+      url: url,
+      method: 'put'
+    });
+    return data;
+  },
+  async updateCart (productId, params) {
+    let data = await axios({
+      url: `carts/${productId}`,
+      method: 'put',
+      data: params,
+    });
+    return data;
+  },
+  async delProduct (productId) {
+    let data = await axios({
+      url: `carts/${productId}`,
+      method: 'delete'
+    });
+    return data;
   }
 }
 
