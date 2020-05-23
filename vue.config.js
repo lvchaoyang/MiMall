@@ -13,5 +13,11 @@ module.exports = {
       }
     }
     // 此时请求到 /api/xxx 现在会被代理到请求 `${proxy.target}/xxx`
+  },
+  publicPath: '/app', // 部署应用包时的基本 URL
+  outputDir: 'html', // 生成的生产环境构建文件的目录
+  productionSourceMap: false, // 打包不生成.map文件
+  chainWebpack: (config) => {
+    config.plugins.delete('prefetch') // 禁止预加载
   }
 }

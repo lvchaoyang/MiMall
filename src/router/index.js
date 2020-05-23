@@ -21,6 +21,7 @@ const router = new Router({
         {
           path: '/product/:id',
           name: 'product',
+          // component: resolve => require(['../pages/pruduct'], resolve),
           component: () => import('../pages/product'),
         },
         {
