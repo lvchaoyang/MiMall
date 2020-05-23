@@ -92,7 +92,7 @@ export default {
       orderDetail: [], // 订单详情，包含商品列表
       showDetail: false, // 是否显示订单详情
       payType: '', // 支付类型
-      showPay: true, // 是否显示微信支付弹框
+      showPay: false, // 是否显示微信支付弹框
       payImg: '', // 微信支付的二维码地址
       showPayModal: false, // 是否显示二次支付确认弹框
       payment: 0, // 订单总金额

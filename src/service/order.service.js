@@ -62,10 +62,10 @@ const orderService = {
     /**
      * 获取订单列表
      */
-    async getOrderList () {
+    async getOrderList (pageNum, pageSize) {
         let data = await axios({
-            url: '/orders',
-            method: 'get'
+            url: `/orders?pageNum=${pageNum}&pageSize=${pageSize}`,
+            method: 'get',
         })
         return data
     }

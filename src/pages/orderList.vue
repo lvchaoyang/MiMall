@@ -8,6 +8,7 @@
     <div class="wrapper">
       <div class="container">
         <div class="order-box">
+          <loading v-if="loading"></loading>
           <div class="order" v-for="order in list" :key="order.orderNo">
             <div class="order-title">
               <div class="item-info fl">
@@ -45,6 +46,29 @@
               </div>
             </div>
           </div>
+          <el-pagination
+            class="pagination"
+            background
+            layout="prev, pager, next"
+            :pageSize="pageSize"
+            :currentPage="pageNum"
+            :total="total"
+            @current-change="handleChange"
+            v-if="showPaginiation"
+            >
+          </el-pagination>
+          <div class="load-more" v-if="showLoadMore">
+              <el-button type="primary" :loading="loading" @click="loadMore">加载更多</el-button>
+          </div>
+          <div class="scroll-more"
+            v-infinite-scroll="scrollMore"
+            :infinite-scroll-disabled="busy"
+            infinite-scroll-distance="410"
+            v-if="showScrollMore"
+          >
+            <img src="../assets/images/loading-svg/loading-spinning-bubbles.svg" alt="" v-show="loading">
+          </div>
+          <no-data v-if="!loading && list.length === 0"></no-data>
         </div>
       </div>
     </div>
@@ -54,12 +78,34 @@
 <script>
 import OrderHeader from '../components/OrderHeader'
 import orderService from '../service/order.service'
+import Loading from '../components/Loading'
+import NoData from '../components/NoData'
+import { Pagination,Button } from 'element-ui'
+import infiniteScroll from 'vue-infinite-scroll'
 export default {
   name: "order-list",
-  components: { OrderHeader },
+  components: {
+    OrderHeader,
+    Loading,
+    NoData,
+    [Pagination.name]: Pagination,
+    [Button.name]: Button
+  },
+  directives: { // 指令
+    infiniteScroll
+  },
   data() {
     return {
+      loading: false,
       list: [],
+      pageSize: 2,
+      pageNum: 1,
+      total: 0,
+      showPaginiation: true, // 普通分页
+      showLoadMore: false, // 加载更多：是否显示按钮
+      showScrollMore: false, // 滚动加载更多
+      busy: true, // 滚动加载，是否触发
+     
     }
   },
   mounted () {
@@ -67,10 +113,65 @@ export default {
   },
   methods: {
     async getOrderList () {
-      let data = await orderService.getOrderList();
-      console.log(data);
-      this.list = data.list;
-      console.log(this.list);
+      this.loading = true;
+      try {
+        let data = await orderService.getOrderList(this.pageNum, this.pageSize);
+        this.loading = false;
+        this.list = data.list || []; // 普通分页
+        this.total = data.total;
+      } catch(e) {
+        this.loading = false;
+        throw new Error(e)
+      }
+    },
+    /**
+     * 切换页码
+     */
+    handleChange(pageNum) {
+      this.pageNum = pageNum;
+      this.getOrderList();
+    },
+    // 第二种方法：加载更多按钮
+    async loadMore(){
+      this.pageNum++;
+      this.loading = true;
+      try {
+        let data = await orderService.getOrderList(this.pageNum, this.pageSize);
+        this.loading = false;
+        this.list = this.list.concat(data.list)
+        this.total = data.total;
+      } catch(e) {
+        this.loading = false;
+        throw new Error(e)
+      }
+    },
+    // 第三种方法：滚动加载，通过npm插件实现
+    scrollMore(){
+      this.busy = true;
+      setTimeout(()=>{
+        this.pageNum++;
+        this.getList();
+      },500);
+    },
+    /**
+     * 获取订单列表
+     */
+    async getList () {
+      this.loading = true;
+      try {
+        let data = await orderService.getOrderList(this.pageNum, this.pageSize);
+        this.loading = false;
+        this.list = this.list.concat(data.list)
+          this.loading = false;
+          if(data.hasNextPage){
+            this.busy=false;
+          } else {
+            this.busy=true;
+          }
+      } catch(e) {
+        this.loading = false;
+        throw new Error(e)
+      }
     },
     /**
      * 去支付

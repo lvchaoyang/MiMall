@@ -38,9 +38,9 @@ export default {
        let data = await orderService.payForGoods(params);
       //  console.log(data.content);
        this.content = data.content;
-      //  setTimeout(() => {
-      //    document.forms[0].submit()
-      //  }, 100)
+       setTimeout(() => {
+         document.forms[0].submit()
+       }, 100)
      }
   }
 }
